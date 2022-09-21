@@ -1,0 +1,23 @@
+{
+  "name": "solana-validator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docker:build": "docker buildx build --platform=linux/arm64 --load . -t ghcr.io/kin-labs/solana-docker-m1",
+    "docker:push": "docker push ghcr.io/kin-labs/solana-docker-m1",
+    "docker:run": "docker run --rm -it -p 8899:8899 -p 8900:8900 --platform=linux/arm64 --name solana-docker-m1 ghcr.io/kin-labs/solana-docker-m1",
+    "docker:run-sh": "docker run --rm -it --name solana-docker-m1-sh --entrypoint bash ghcr.io/kin-labs/solana-docker-m1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kin-labs/solana-docker-m1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kin-labs/solana-docker-m1/issues"
+  },
+  "homepage": "https://github.com/kin-labs/solana-docker-m1#readme"
+}
