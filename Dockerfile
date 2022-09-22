@@ -25,7 +25,7 @@ RUN mv /workspace/solana-$SOLANA_VERSION /workspace/solana
 
 # Build the solana-test-validator
 WORKDIR /workspace/solana
-RUN cargo build --bin solana-test-validator --release
+RUN cargo build --bin solana-test-validator --release --jobs 1
 RUN cp target/release/solana-test-validator /workspace/bin/
 
 #RUN cp target/release/* /workspace/bin
