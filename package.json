@@ -5,19 +5,19 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "docker:build": "docker buildx build --platform=linux/arm64 --load . -t ghcr.io/kin-labs/solana-docker-m1",
-    "docker:push": "docker push ghcr.io/kin-labs/solana-docker-m1",
-    "docker:run": "docker run --rm -it -p 8899:8899 -p 8900:8900 --platform=linux/arm64 --name solana-docker-m1 ghcr.io/kin-labs/solana-docker-m1",
-    "docker:run-sh": "docker run --rm -it --name solana-docker-m1-sh --entrypoint bash ghcr.io/kin-labs/solana-docker-m1"
+    "docker:build": "docker buildx build --platform=linux/amd64 --load . -t ghcr.io/beeman/solana-test-validator:latest",
+    "docker:push": "docker push ghcr.io/beeman/solana-test-validator",
+    "docker:run": "docker run --rm -it -p 8899:8899 -p 8900:8900 --platform=linux/amd64 --name solana-docker-m1 ghcr.io/beeman/solana-test-validator",
+    "docker:run-sh": "docker run --rm -it --platform=linux/amd64 --name solana-docker-m1-sh --entrypoint bash ghcr.io/beeman/solana-test-validator"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kin-labs/solana-docker-m1.git"
+    "url": "git+https://github.com/beeman/solana-test-validator.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/kin-labs/solana-docker-m1/issues"
+    "url": "https://github.com/beeman/solana-test-validator/issues"
   },
-  "homepage": "https://github.com/kin-labs/solana-docker-m1#readme"
+  "homepage": "https://github.com/beeman/solana-test-validator#readme"
 }
