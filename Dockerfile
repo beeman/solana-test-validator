@@ -1,36 +1,37 @@
-FROM debian:bullseye as base
+FROM debian:bullseye AS base
+
+ARG AGAVE_VERSION=2.0.15
+ARG RUST_VERSION=stable
+
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
 WORKDIR /workspace
 
 RUN mkdir -pv "/workspace/bin" && echo 'echo test' > '/workspace/bin/test.sh' && chmod +x '/workspace/bin/test.sh'
 
 ENV PATH="/workspace/bin:${PATH}"
 
-FROM base as builder
+FROM base AS builder
 
 # Install os deps
 RUN apt update && \
-    apt-get install -y build-essential clang cmake curl libudev-dev pkg-config && \
+    apt-get install -y build-essential clang cmake curl libudev-dev pkg-config protobuf-compiler && \
     rm -rf /var/lib/apt/lists/*
 
 # Setup rust
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain 1.59.0 -y
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain $RUST_VERSION -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
-ARG SOLANA_VERSION=1.10.38
-
-# Get the solana source
-RUN curl https://codeload.github.com/solana-labs/solana/tar.gz/refs/tags/v$SOLANA_VERSION | tar xvz
-RUN mv /workspace/solana-$SOLANA_VERSION /workspace/solana
+# Get the agave source
+RUN curl https://codeload.github.com/anza-xyz/agave/tar.gz/refs/tags/v$AGAVE_VERSION | tar xvz
+RUN mv /workspace/agave-$AGAVE_VERSION /workspace/agave
 
 # Build the solana-test-validator
-WORKDIR /workspace/solana
-RUN cargo build --bin solana-test-validator --release --jobs 1
+WORKDIR /workspace/agave
+RUN cargo build --bin solana-test-validator --release
 RUN cp target/release/solana-test-validator /workspace/bin/
 
-#RUN cp target/release/* /workspace/bin
-
-FROM base as final
+FROM base AS final
 
 ## Install os deps
 RUN apt update && \
