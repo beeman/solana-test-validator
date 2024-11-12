@@ -7,8 +7,6 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 WORKDIR /workspace
 
-RUN mkdir -pv "/workspace/bin" && echo 'echo test' > '/workspace/bin/test.sh' && chmod +x '/workspace/bin/test.sh'
-
 ENV PATH="/workspace/bin:${PATH}"
 
 FROM base AS builder
@@ -29,13 +27,18 @@ RUN mv /workspace/agave-$AGAVE_VERSION /workspace/agave
 # Build the solana-test-validator
 WORKDIR /workspace/agave
 RUN cargo build --bin solana-test-validator --release
-RUN cp target/release/solana-test-validator /workspace/bin/
 
+# Copy the binary to the /workspace/bin directory
+RUN mkdir -pv "/workspace/bin/" && cp target/release/solana-test-validator /workspace/bin/solana-test-validator
+ENV PATH="/workspace/bin:${PATH}"
+
+# Create the final image
 FROM base AS final
 
-## Install os deps
+## Install runtime os deps
 RUN apt update && \
     apt-get install -y bzip2 && \
     rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /workspace/bin/* /workspace/bin
+# Copy the binary from the builder image
+COPY --from=builder /workspace/bin/* /workspace/bin/
