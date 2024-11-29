@@ -41,7 +41,6 @@ RUN cargo build --bin solana-test-validator --release
 
 # Copy the binary to the /workspace/bin directory
 RUN mkdir -pv "/workspace/bin/" && cp target/release/solana-test-validator /workspace/bin/solana-test-validator
-ENV PATH="/workspace/bin:${PATH}"
 
 # Create the final image
 FROM base AS final
