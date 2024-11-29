@@ -9,7 +9,10 @@ WORKDIR /workspace
 
 ENV PATH="/workspace/bin:${PATH}"
 
-## Base os deps
+# Expose the Solana Test Validator ports
+EXPOSE 8899 8900
+
+# Base os deps
 RUN apt update && \
     apt-get install -y bzip2 tini && \
     rm -rf /var/lib/apt/lists/*
