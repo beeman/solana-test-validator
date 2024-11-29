@@ -2,18 +2,12 @@ name: Docker Image
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - 'master'
-      - 'dev'
-      - 'v*.*.*'
-    tags:
-      - 'v*.*.*'
-  pull_request:
-    branches:
-      - 'master'
-      - 'dev'
-      - 'v*.*.*'
+  schedule:
+    - cron: '0 0 * * 0' # Run every Sunday
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -25,6 +19,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Fetch latest Agave version
+        id: fetch_version
+        run: |
+          LATEST_VERSION=$(curl -s https://api.github.com/repos/anza-xyz/agave/releases/latest | jq -r .tag_name | sed 's/^v//')
+          echo "AGAVE_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
+        env:
+          AGAVE_VERSION: ""
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -44,6 +45,7 @@ jobs:
           images: |
             ghcr.io/beeman/solana-test-validator
           tags: |
+            type=raw,value=${{ env.AGAVE_VERSION }}
             type=schedule
             type=ref,event=branch
             type=ref,event=pr
@@ -51,11 +53,15 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha
+          labels: |
+            org.opencontainers.image.version=${{ env.AGAVE_VERSION }}
+            org.opencontainers.image.title=Solana Test Validator
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
+          build-args: AGAVE_VERSION=${{ env.AGAVE_VERSION }}
           tags: ${{ steps.meta_solana_test_validator.outputs.tags }}
           labels: ${{ steps.meta_solana_test_validator.outputs.labels }}
