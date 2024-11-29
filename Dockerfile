@@ -9,6 +9,14 @@ WORKDIR /workspace
 
 ENV PATH="/workspace/bin:${PATH}"
 
+## Base os deps
+RUN apt update && \
+    apt-get install -y bzip2 tini && \
+    rm -rf /var/lib/apt/lists/*
+
+# Use tini as the entry point
+ENTRYPOINT ["/usr/bin/tini", "--"]
+
 FROM base AS builder
 
 # Install os deps
@@ -35,10 +43,8 @@ ENV PATH="/workspace/bin:${PATH}"
 # Create the final image
 FROM base AS final
 
-## Install runtime os deps
-RUN apt update && \
-    apt-get install -y bzip2 && \
-    rm -rf /var/lib/apt/lists/*
-
 # Copy the binary from the builder image
 COPY --from=builder /workspace/bin/* /workspace/bin/
+
+# Run the solana-test-validator by default
+CMD ["solana-test-validator"]
