@@ -47,6 +47,7 @@ jobs:
             ghcr.io/beeman/solana-test-validator
           tags: |
             type=raw,value=${{ env.AGAVE_VERSION }}
+            type=raw,value=latest
             type=schedule
             type=ref,event=branch
             type=ref,event=pr
