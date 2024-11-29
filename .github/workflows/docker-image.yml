@@ -24,6 +24,7 @@ jobs:
         run: |
           LATEST_VERSION=$(curl -s https://api.github.com/repos/anza-xyz/agave/releases/latest | jq -r .tag_name | sed 's/^v//')
           echo "AGAVE_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
+          echo "Latest Agave version is $LATEST_VERSION"
         env:
           AGAVE_VERSION: ""
       - name: Set up QEMU
