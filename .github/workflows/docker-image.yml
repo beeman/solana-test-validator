@@ -3,7 +3,7 @@ name: Docker Image
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * 0' # Run every Sunday
+    - cron: '0 0 * * *' # Run every day at midnight
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
