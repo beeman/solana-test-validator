@@ -1,6 +1,6 @@
 FROM debian:bullseye AS base
 
-ARG AGAVE_VERSION=2.0.15
+ARG AGAVE_VERSION=2.0.18
 ARG RUST_VERSION=stable
 
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
