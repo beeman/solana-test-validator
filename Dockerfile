@@ -1,16 +1,12 @@
+### BASE IMAGE ###
 FROM debian:bullseye AS base
 
+# Set the Agave and Rust versions
 ARG AGAVE_VERSION=2.0.18
 ARG RUST_VERSION=stable
 
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-
+# Set the working directory
 WORKDIR /workspace
-
-ENV PATH="/workspace/bin:${PATH}"
-
-# Expose the Solana Test Validator ports
-EXPOSE 8899 8900
 
 # Base OS dependencies
 RUN apt update && \
@@ -25,6 +21,7 @@ RUN groupadd --gid 1000 solana && \
 # Use tini as the entry point
 ENTRYPOINT ["/usr/bin/tini", "--"]
 
+### BUILDER IMAGE ###
 FROM base AS builder
 
 # Install OS dependencies
@@ -50,8 +47,11 @@ RUN mkdir -pv "/workspace/bin/" && cp target/release/solana-test-validator /work
 # Ensure permissions for the non-root user
 RUN chown -R solana:solana /workspace
 
-# Create the final image
+### FINAL IMAGE ###
 FROM base AS final
+
+# Expose the Solana Test Validator ports
+EXPOSE 8899 8900
 
 # Copy the binary from the builder image
 COPY --from=builder /workspace/bin/* /workspace/bin/
@@ -61,6 +61,9 @@ RUN chown -R solana:solana /workspace
 
 # Switch to the non-root user
 USER solana
+
+# Add the bin directory to the PATH
+ENV PATH="/workspace/bin:${PATH}"
 
 # Run the solana-test-validator by default
 CMD ["solana-test-validator"]
