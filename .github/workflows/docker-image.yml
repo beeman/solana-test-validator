@@ -48,7 +48,7 @@ jobs:
           tags: |
             type=raw,value=${{ env.AGAVE_VERSION }}
             type=raw,value=latest
-            type=schedule
+            type=schedule,pattern={{date 'YYYYMMDD'}}
             type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
@@ -56,8 +56,9 @@ jobs:
             type=semver,pattern={{major}}
             type=sha
           labels: |
-            org.opencontainers.image.version=${{ env.AGAVE_VERSION }}
+            maintainer=beeman
             org.opencontainers.image.title=Solana Test Validator
+            org.opencontainers.image.version=${{ env.AGAVE_VERSION }}
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
