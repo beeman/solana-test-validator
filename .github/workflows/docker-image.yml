@@ -47,7 +47,7 @@ jobs:
             ghcr.io/beeman/solana-test-validator
           tags: |
             type=raw,value=${{ env.AGAVE_VERSION }}
-            type=raw,value=latest
+            type=raw,value=latest,priority=1024
             type=schedule,pattern={{date 'YYYYMMDD'}}
             type=ref,event=branch
             type=ref,event=pr
@@ -55,7 +55,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha
-          labels: |
+          annotations: |
             maintainer=beeman
             org.opencontainers.image.title=Solana Test Validator
             org.opencontainers.image.version=${{ env.AGAVE_VERSION }}
@@ -67,4 +67,4 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           build-args: AGAVE_VERSION=${{ env.AGAVE_VERSION }}
           tags: ${{ steps.meta_solana_test_validator.outputs.tags }}
-          labels: ${{ steps.meta_solana_test_validator.outputs.labels }}
+          annotations: ${{ steps.meta_solana_test_validator.outputs.annotations }}
