@@ -14,7 +14,7 @@ EXPOSE 8899 8900
 
 # Base OS dependencies
 RUN apt update && \
-    apt-get install -y bzip2 tini && \
+    apt-get install -y bzip2 ca-certificates tini && \
     rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user
