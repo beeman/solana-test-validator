@@ -1,3 +1,5 @@
+CONTAINER_NAME := "solana-test-validator"
+CONTAINER_PARAMS := "-it -p 8899:8899 -p 8900:8900 --rm"
 DOCKER_USER := "ghcr.io/beeman"
 DOCKER_REPO := "solana-test-validator"
 DOCKER_TAG := "latest"
@@ -17,16 +19,23 @@ alias b := build
 build:
     docker build -t {{ DOCKER_USER }}/{{ DOCKER_REPO }}:{{ DOCKER_TAG }} .
 
-push:
-    docker push {{ DOCKER_USER }}/{{ DOCKER_REPO }}:{{ DOCKER_TAG }}
-
 run:
-    docker run --rm -it -p 8899:8899 -p 8900:8900 --name solana-test-validator --rm {{ DOCKER_USER }}/{{ DOCKER_REPO }}:{{ DOCKER_TAG }}
+    docker run {{ CONTAINER_PARAMS }} --name {{ CONTAINER_NAME }} {{ DOCKER_USER }}/{{ DOCKER_REPO }}:{{ DOCKER_TAG }}
 
 run-sh:
-    docker run --rm -it --name solana-test-validator --rm --entrypoint bash {{ DOCKER_USER }}/{{ DOCKER_REPO }}:{{ DOCKER_TAG }}
+    docker run {{ CONTAINER_PARAMS }} --name {{ CONTAINER_NAME }} --entrypoint bash {{ DOCKER_USER }}/{{ DOCKER_REPO }}:{{ DOCKER_TAG }}
 
-#    "docker:build": "docker buildx build --platform=linux/amd64 --load . -t ghcr.io/beeman/solana-test-validator:latest",
-#    "docker:push": "docker push ghcr.io/beeman/solana-test-validator",
-#    "docker:run": "docker run --rm -it -p 8899:8899 -p 8900:8900 --platform=linux/amd64 --name solana-docker-m1 ghcr.io/beeman/solana-test-validator",
-#    "docker:run-sh": "docker run --rm -it --platform=linux/amd64 --name solana-docker-m1-sh --entrypoint bash ghcr.io/beeman/solana-test-validator"
+# [examples]
+example name:
+    case {{ name }} in \
+           "docker-compose") \
+               cd examples/docker-compose && docker compose up; \
+               ;; \
+           "dockerfile") \
+               cd examples/dockerfile && docker build . -t examples-dockerfile && docker run {{ CONTAINER_PARAMS }} --name {{ CONTAINER_NAME }} examples-dockerfile \
+               ;; \
+           *) \
+               echo "Error: example '{{ name }}' does not exist"; \
+               exit 1; \
+               ;; \
+       esac
