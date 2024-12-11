@@ -37,12 +37,17 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 RUN curl https://codeload.github.com/anza-xyz/agave/tar.gz/refs/tags/v$AGAVE_VERSION | tar xvz
 RUN mv /workspace/agave-$AGAVE_VERSION /workspace/agave
 
-# Build the solana-test-validator
+# Move to the agave directory
 WORKDIR /workspace/agave
-RUN cargo build --bin solana-test-validator --release
 
-# Copy the binary to the /workspace/bin directory
-RUN mkdir -pv "/workspace/bin/" && cp target/release/solana-test-validator /workspace/bin/solana-test-validator
+# Create the /workspace/bin directory
+RUN mkdir -pv "/workspace/bin/"
+
+# Build the solana binary and copy it to /workspace/bin
+RUN cargo build --bin solana --release && cp /workspace/agave/target/release/solana /workspace/bin/solana
+
+# Build the solana-test-validator binary and copy it to /workspace/bin
+RUN cargo build --bin solana-test-validator --release && cp /workspace/agave/target/release/solana-test-validator /workspace/bin/solana-test-validator
 
 # Ensure permissions for the non-root user
 RUN chown -R solana:solana /workspace
