@@ -1,5 +1,5 @@
 ### BASE IMAGE ###
-FROM debian:bullseye AS base
+FROM debian:12-slim AS base
 
 # Set the Agave and Rust versions
 ARG AGAVE_VERSION=2.0.18
