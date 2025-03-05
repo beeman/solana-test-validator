@@ -2,7 +2,7 @@
 FROM debian:12-slim AS base
 
 # Set the Agave and Rust versions
-ARG AGAVE_VERSION=2.0.18
+ARG AGAVE_VERSION=2.2.16
 ARG RUST_VERSION=stable
 ARG USER=solana
 ARG WORKSPACE=/workspace
