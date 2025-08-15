@@ -2,7 +2,7 @@
 FROM debian:12-slim AS base
 
 # Set the Agave and Rust versions
-ARG AGAVE_VERSION=2.2.16
+ARG AGAVE_VERSION=2.3.7
 ARG RUST_VERSION=stable
 ARG USER=solana
 ARG WORKSPACE=/workspace
@@ -25,7 +25,7 @@ FROM base AS builder
 
 # Install OS dependencies
 RUN apt update && \
-    apt-get install -y build-essential clang cmake curl libudev-dev pkg-config protobuf-compiler && \
+    apt-get install -y build-essential clang cmake curl libclang-dev llvm-dev libudev-dev pkg-config protobuf-compiler && \
     rm -rf /var/lib/apt/lists/*
 
 # Setup Rust
