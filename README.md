@@ -18,6 +18,15 @@ This will start the Solana Test Validator on port 8899 and 8900.
 
 See the [examples](https://github.com/beeman/solana-test-validator/tree/main/examples) directory for more information.
 
+### Note on `io_uring`
+
+Docker's default seccomp policy blocks `io_uring` syscalls in containers, which prevents `solana-test-validator` from starting since agave v3 depends on it. Relax seccomp permissions to workaround this
+
+```sh
+docker run --security-opt seccomp=unconfined ghcr.io/beeman/solana-test-validator:latest
+# alternatively, create a seccomp profile that allows io_uring and other required syscalls
+```
+
 ## Building the Docker image
 
 To build the Docker image, you can use the following command using [just](https://github.com/casey/just):
