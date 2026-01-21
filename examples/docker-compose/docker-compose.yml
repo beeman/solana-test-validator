@@ -6,3 +6,5 @@ services:
     ports:
       - "8899:8899"
       - "8900:8900"
+    security_opt:
+      - seccomp:unconfined

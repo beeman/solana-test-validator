@@ -18,6 +18,15 @@ This will start the Solana Test Validator on port 8899 and 8900.
 
 See the [examples](https://github.com/beeman/solana-test-validator/tree/main/examples) directory for more information.
 
+### Note on `io_uring`
+
+Agave v2.0+ uses `io_uring` to significantly improve snapshot unpacking performance (see [PR #6535](https://github.com/anza-xyz/agave/pull/6535)). Docker's default security profile (`seccomp`) blocks necessary syscalls (like `io_uring_setup`), causing the validator to fail. Using `--security-opt seccomp=unconfined` (or a custom profile) is required to allow these syscalls.
+
+```sh
+docker run --security-opt seccomp=unconfined ghcr.io/beeman/solana-test-validator:latest
+# alternatively, create a seccomp profile that allows io_uring and other required syscalls
+```
+
 ## Building the Docker image
 
 To build the Docker image, you can use the following command using [just](https://github.com/casey/just):

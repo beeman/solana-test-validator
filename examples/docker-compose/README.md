@@ -2,6 +2,10 @@
 
 You can use this image in a Docker Compose file like so:
 
+### Note on `io_uring`
+
+Agave v2.0+ uses `io_uring` to significantly improve snapshot unpacking performance (see [PR #6535](https://github.com/anza-xyz/agave/pull/6535)). Docker's default security profile (`seccomp`) blocks necessary syscalls (like `io_uring_setup`), causing the validator to fail. The `security_opt` configuration is necessary to allow these syscalls.
+
 ```yaml
 # docker-compose.yml
 services:
@@ -12,6 +16,8 @@ services:
     ports:
       - "8899:8899"
       - "8900:8900"
+    security_opt:
+      - seccomp:unconfined
 ```
 
 Then run it like this:
