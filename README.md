@@ -11,7 +11,7 @@ This makes it possible to run this image on devices with Apple Silicon processor
 To run the Solana Test Validator, you can use the following command:
 
 ```shell
-docker run -it -p 8899:8899 -p 8900:8900 --rm --name solana-test-validator ghcr.io/beeman/solana-test-validator:latest
+docker run --security-opt seccomp=unconfined -it -p 8899:8899 -p 8900:8900 --rm --name solana-test-validator ghcr.io/beeman/solana-test-validator:latest
 ```
 
 This will start the Solana Test Validator on port 8899 and 8900.

@@ -18,7 +18,7 @@ Agave v2.0+ uses `io_uring` to significantly improve snapshot unpacking performa
 # Build the custom Docker image
 docker build . -t my-custom-solana-test-validator
 # Run the custom Docker image
-docker run -it -p 8899:8899 -p 8900:8900 --security-opt seccomp=unconfined --rm --name my-test-validator my-custom-solana-test-validator
+docker run --security-opt seccomp=unconfined -it -p 8899:8899 -p 8900:8900 --rm --name my-test-validator my-custom-solana-test-validator
 ```
 
 After running this command, you can access the Solana Test Validator at http://localhost:8899 and http://localhost:8900.
