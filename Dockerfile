@@ -14,7 +14,7 @@ WORKDIR $WORKSPACE
 
 # Base OS dependencies
 RUN apt update && \
-    apt-get install -y bzip2 ca-certificates tini && \
+    apt-get install -y bzip2 ca-certificates curl tini && \
     rm -rf /var/lib/apt/lists/*
 
 # Use tini as the entry point
@@ -70,6 +70,12 @@ ENV PATH="$WORKSPACE_BIN:${PATH}"
 
 # Expose the Solana Test Validator ports
 EXPOSE 8899 8900
+
+HEALTHCHECK --interval=10s --timeout=3s --start-period=30s --retries=3 \
+  CMD curl --fail --silent --output /dev/null \
+    --header 'Content-Type: application/json' \
+    --data '{"jsonrpc":"2.0","id":1,"method":"getHealth"}' \
+    http://127.0.0.1:8899
 
 # Run the solana-test-validator by default
 CMD ["solana-test-validator"]
