@@ -1,6 +1,6 @@
 CONTAINER_NAME := "solana-test-validator"
 CONTAINER_PARAMS := "--security-opt seccomp=unconfined -it -p 8899:8899 -p 8900:8900 --rm"
-DOCKER_USER := "ghcr.io/beeman"
+DOCKER_USER := "beeman"
 DOCKER_REPO := "solana-test-validator"
 DOCKER_TAG := "latest"
 

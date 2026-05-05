@@ -2,6 +2,14 @@
 
 This repository contains a Docker image for the Solana Test Validator.
 
+## Docker Image
+
+```shell
+beeman/solana-test-validator
+```
+
+Also available on GitHub Container Registry as `ghcr.io/beeman/solana-test-validator`.
+
 This Docker image is built each night for `linux/amd64` as well as `linux/arm64` platforms.
 
 This makes it possible to run this image on devices with Apple Silicon processors.
@@ -11,7 +19,7 @@ This makes it possible to run this image on devices with Apple Silicon processor
 To run the Solana Test Validator, you can use the following command:
 
 ```shell
-docker run --security-opt seccomp=unconfined -it -p 8899:8899 -p 8900:8900 --rm --name solana-test-validator ghcr.io/beeman/solana-test-validator:latest
+docker run --security-opt seccomp=unconfined -it -p 8899:8899 -p 8900:8900 --rm --name solana-test-validator beeman/solana-test-validator:latest
 ```
 
 This will start the Solana Test Validator on port 8899 and 8900.
@@ -23,7 +31,7 @@ See the [examples](https://github.com/beeman/solana-test-validator/tree/main/exa
 Agave v2.0+ uses `io_uring` to significantly improve snapshot unpacking performance (see [PR #6535](https://github.com/anza-xyz/agave/pull/6535)). Docker's default security profile (`seccomp`) blocks necessary syscalls (like `io_uring_setup`), causing the validator to fail. Using `--security-opt seccomp=unconfined` (or a custom profile) is required to allow these syscalls.
 
 ```sh
-docker run --security-opt seccomp=unconfined ghcr.io/beeman/solana-test-validator:latest
+docker run --security-opt seccomp=unconfined beeman/solana-test-validator:latest
 # alternatively, create a seccomp profile that allows io_uring and other required syscalls
 ```
 
@@ -35,7 +43,7 @@ To build the Docker image, you can use the following command using [just](https:
 just build
 ```
 
-This will build the Docker image and tag it as `ghcr.io/beeman/solana-test-validator`.
+This will build the Docker image and tag it as `beeman/solana-test-validator`.
 
 ## Running the Docker image
 
